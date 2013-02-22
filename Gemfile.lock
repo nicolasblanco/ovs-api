@@ -1,0 +1,58 @@
+GIT
+  remote: https://github.com/slainer68/redis-persistence.git
+  revision: ad6cd2c30a694fdf7affeb261b3c1e0055db3277
+  specs:
+    redis-persistence (0.0.7)
+      activemodel (> 3.0)
+      hashr (~> 0.0.19)
+      multi_json (~> 1.1)
+      redis (~> 3.0.2)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activemodel (3.2.12)
+      activesupport (= 3.2.12)
+      builder (~> 3.0.0)
+    activesupport (3.2.12)
+      i18n (~> 0.6)
+      multi_json (~> 1.0)
+    builder (3.0.4)
+    coderay (1.0.8)
+    domain_name (0.5.7)
+      unf (~> 0.0.3)
+    hashr (0.0.22)
+    i18n (0.6.1)
+    mechanize (2.5.1)
+      domain_name (~> 0.5, >= 0.5.1)
+      mime-types (~> 1.17, >= 1.17.2)
+      net-http-digest_auth (~> 1.1, >= 1.1.1)
+      net-http-persistent (~> 2.5, >= 2.5.2)
+      nokogiri (~> 1.4)
+      ntlm-http (~> 0.1, >= 0.1.1)
+      webrobots (~> 0.0, >= 0.0.9)
+    method_source (0.8.1)
+    mime-types (1.21)
+    multi_json (1.6.1)
+    net-http-digest_auth (1.2.1)
+    net-http-persistent (2.8)
+    nokogiri (1.5.6)
+    ntlm-http (0.1.1)
+    pry (0.9.12)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.4)
+    redis (3.0.2)
+    slop (3.4.3)
+    unf (0.0.5)
+      unf_ext
+    unf_ext (0.0.6)
+    webrobots (0.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  mechanize
+  pry
+  redis-persistence!
