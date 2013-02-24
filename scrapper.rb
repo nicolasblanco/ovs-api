@@ -1,16 +1,10 @@
 require "mechanize"
 require "redis/persistence"
+require "date"
 require "pry"
 
-Redis::Persistence.config.redis = Redis.new
-
-class Event
-  include Redis::Persistence
-
-  property :title
-  property :body
-  property :uri
-end
+require File.expand_path("../config", __FILE__)
+require File.expand_path("../models/event", __FILE__)
 
 EVENT_URI_REGEXP = /\A[A-Za-z\-\_]{3,}\-([0-9]{3,})\.html\z/
 
@@ -33,19 +27,27 @@ if forms.any?
   login_form.submit
 end
 
-1.upto(5) do |page_number|
+5.times do |day_advance|
+  current_date = Date.today + day_advance
+  current_url = "http://paris.onvasortir.com/vue_sortie_day.php?y=#{current_date.year}&m=#{"%02d" % current_date.month}&d=#{"%02d" % current_date.day}"
   puts ""
-  puts "Saving events from page #{page_number}..."
-  events_page = mechanize.get "http://paris.onvasortir.com/vue_sortie_all.php?page=#{page_number}&f_quoi=&autre=&filtre_age=filtre1"
+  puts ""
+  puts "Saving events from page #{current_url}..."
+  events_page = mechanize.get(current_url)
 
   raise "Could not login into OVS, check your env variables OVS_LOGIN and OVS_PASSWORD :(" if events_page.forms.any?
 
   events_page.links_with(href: EVENT_URI_REGEXP).each do |link|
-    event = Event.new
-    event.id = link.uri.to_s.slice(EVENT_URI_REGEXP, 1)
+    puts "following event #{link.uri}..."
+    event_page = link.click
+
+    event = OVSApi::Models::Event.new
+    event.id = "#{current_date}-#{link.uri.to_s.slice(EVENT_URI_REGEXP, 1)}"
     event.title = link.text
+    event.starts_on = current_date
+    event.uri = link.uri.to_s
+    event.body = event_page.search("td.background_centre div.PADpost_txt")[1].search("table tr").last.text
 
     event.save
-    print "."
   end
 end
