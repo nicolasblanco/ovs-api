@@ -7,7 +7,7 @@ require File.expand_path("../models/event", __FILE__)
 
 module OVSApi
   class API < Grape::API
-    version 'v1', using: :header, vendor: "osapi"
+    version 'v1', using: :header, vendor: "ovsapi"
     format :json
 
     resources :events do
