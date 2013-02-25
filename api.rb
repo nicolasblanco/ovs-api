@@ -12,6 +12,8 @@ module OVSApi
 
     before do
       header "Access-Control-Allow-Origin", "*"
+      header "Access-Control-Allow-Methods", "OPTIONS, GET"
+      header "Access-Control-Allow-Headers", "accept, origin, x-requested-with"
     end
 
     resources :events do
