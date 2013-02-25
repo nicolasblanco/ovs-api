@@ -10,6 +10,10 @@ module OVSApi
     version 'v1', using: :header, vendor: "ovsapi"
     format :json
 
+    before do
+      header "Access-Control-Allow-Origin", "*"
+    end
+
     resources :events do
       desc "Returns an event"
       get ":id" do
@@ -21,13 +25,15 @@ module OVSApi
         optional :date, type: String, desc: "Date of the events to retrieve (format YYYY-MM-DD)"
       end
       get "/" do
-        if params[:date]
+        ids = if params[:date]
           Redis::Persistence.config.redis.keys("ovs_api_models_events:#{params[:date]}-*").map do |k|
             k.gsub("ovs_api_models_events:", "")
           end
         else
           OVSApi::Models::Event.__all_ids
         end
+
+        ids.sort.map { |id| OVSApi::Models::Event.find(id) }
       end
     end
   end

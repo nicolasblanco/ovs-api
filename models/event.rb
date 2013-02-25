@@ -6,7 +6,8 @@ module OVSApi
       property :title
       property :body
       property :uri
-      property :starts_on
+      property :date
+      property :starts_at
     end
   end
 end

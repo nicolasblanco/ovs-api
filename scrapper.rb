@@ -9,7 +9,9 @@ require File.expand_path("../models/event", __FILE__)
 EVENT_URI_REGEXP = /\A[A-Za-z\-\_]{3,}\-([0-9]{3,})\.html\z/
 
 mechanize = Mechanize.new { |agent|
-  agent.user_agent_alias = 'Mac Safari'
+  agent.request_headers = { "Accept-Language" => "fr-FR",
+                            "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.99 Safari/537.22"
+                          }
 }
 
 puts "Loading OVS index page..."
@@ -44,9 +46,13 @@ end
     event = OVSApi::Models::Event.new
     event.id = "#{current_date}-#{link.uri.to_s.slice(EVENT_URI_REGEXP, 1)}"
     event.title = link.text
-    event.starts_on = current_date
+    event.date = current_date
     event.uri = link.uri.to_s
-    event.body = event_page.search("td.background_centre div.PADpost_txt")[1].search("table tr").last.text
+    main_table = event_page.search("td.background_centre div.PADpost_txt")[1].search("table tr")
+    # binding.pry if event.uri == "grands-scientifiques-idees-recues-6327751.html"
+    event.body = main_table.last.text.gsub("\t", "").gsub("\n", "<br />")
+    event.starts_at = main_table.map { |c| c.text.gsub("\t", "").gsub("\n", "") }.detect { |t| t =~ /\A[0-9]{1,2}:[0-9]{1,2}( \(du matin\))?\z/ }.gsub(" (du matin)", "")
+    event.id = "#{current_date}-#{event.starts_at.gsub(":", "")}-#{link.uri.to_s.slice(EVENT_URI_REGEXP, 1)}"
 
     event.save
   end
