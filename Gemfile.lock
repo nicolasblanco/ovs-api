@@ -61,6 +61,8 @@ GEM
     rack (1.5.2)
     rack-accept (0.4.5)
       rack (>= 0.4)
+    rack-cors (0.2.7)
+      rack
     rack-mount (0.8.3)
       rack (>= 1.0.0)
     redis (3.0.2)
@@ -81,4 +83,6 @@ DEPENDENCIES
   mechanize
   pry
   puma
+  rack
+  rack-cors
   redis-persistence!

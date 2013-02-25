@@ -3,8 +3,10 @@ source "https://rubygems.org"
 
 ruby "2.0.0"
 
-gem "mechanize", require: false
-gem "redis-persistence", git: "https://github.com/slainer68/redis-persistence.git", require: false
-gem "pry", require: false
+gem "rack"
+gem "mechanize"
+gem "redis-persistence", git: "https://github.com/slainer68/redis-persistence.git"
+gem "pry"
 gem "puma"
 gem "grape"
+gem 'rack-cors'

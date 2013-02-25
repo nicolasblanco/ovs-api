@@ -21,10 +21,6 @@ module OVSApi
         optional :date, type: String, desc: "Date of the events to retrieve (format YYYY-MM-DD)"
       end
       get "/" do
-        header "Access-Control-Allow-Origin", "http://ovs-client.herokuapp.com"
-        header "Access-Control-Allow-Methods", "OPTIONS, GET"
-        header "Access-Control-Allow-Headers", "accept, origin, x-requested-with"
-
         ids = if params[:date]
           Redis::Persistence.config.redis.keys("ovs_api_models_events:#{params[:date]}-*").map do |k|
             k.gsub("ovs_api_models_events:", "")
